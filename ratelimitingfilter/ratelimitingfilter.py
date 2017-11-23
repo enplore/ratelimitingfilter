@@ -15,7 +15,7 @@ class RateLimitingFilter(logging.Filter):
     when initialising an instance of the filter.
     """
 
-    def __init__(self, rate=1, per=30, burst=1, **kwargs):
+    def __init__(self, rate=1, per=30, burst=1, exclude_levels=None, **kwargs):
         """Initialise an instance of the RateLimitingFilter allowing a default rate of 1 record
         every 30 seconds when no arguments are supplied.
 
@@ -33,6 +33,7 @@ class RateLimitingFilter(logging.Filter):
         self.rate = rate
         self.per = per
         self.burst = burst
+        self.exclude_levels = exclude_levels
 
         self._default_bucket = TokenBucket(rate, per, burst)
         self._substr_buckets = None
@@ -60,6 +61,9 @@ class RateLimitingFilter(logging.Filter):
             True if the record can be logged, False otherwise.
         """
 
+        if self.exclude_levels and record.levelname and record.levelname in exclude_levels:
+            return True
+        
         bucket = self._bucket_for(record)
 
         if not bucket:
