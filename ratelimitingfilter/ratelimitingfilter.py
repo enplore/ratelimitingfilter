@@ -61,7 +61,7 @@ class RateLimitingFilter(logging.Filter):
             True if the record can be logged, False otherwise.
         """
 
-        if self.exclude_levels and record.levelname and record.levelname in exclude_levels:
+        if self.exclude_levels and record.levelname and record.levelname in self.exclude_levels:
             return True
         
         bucket = self._bucket_for(record)
