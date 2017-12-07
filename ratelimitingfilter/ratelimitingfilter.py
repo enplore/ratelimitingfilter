@@ -4,7 +4,7 @@ from functools import partial
 import logging
 import os
 from time import time
-
+from six import string_types
 
 class RateLimitingFilter(logging.Filter):
     """The RateLimitingFilter is a logging filter that can be used to throttle the number
@@ -71,9 +71,12 @@ class RateLimitingFilter(logging.Filter):
 
         if bucket.consume():
             if bucket.limited > 0:
-                # Append a message to the record indicating the number of previously suppressed messages
-                record.msg += '{linesep}... {num} additional messages suppressed'.format(linesep=os.linesep,
-                                                                                         num=bucket.limited)
+                if isinstance(record.msg, string_types):
+                    # Append a message to the record indicating the number of previously suppressed messages
+                    record.msg += '{linesep}... {num} additional messages suppressed'.format(linesep=os.linesep,
+                                                                                            num=bucket.limited)
+                elif isinstance(record.msg, dict):
+                    record.msg['additional_logging_message'] = '{num} additional messages suppressed'.format(num=bucket.limited)
             bucket.limited = 0
             return True
 

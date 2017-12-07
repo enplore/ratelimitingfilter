@@ -16,4 +16,5 @@ setup(name='ratelimitingfilter',
       license='MIT',
       packages=['ratelimitingfilter'],
       keywords='logging filter SMTPHandler ratelimit throughput',
-      tests_require=['mock==2.0'])
+      tests_require=['mock==2.0'],
+      setup_requires=['six>=1.10.0'])
