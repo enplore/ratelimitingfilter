@@ -95,8 +95,9 @@ class RateLimitingFilter(logging.Filter):
     def _get_substr_bucket(self, record):
         # Locate the relevant token bucket by matching the configured substrings against the message
         for substr in self._substr_buckets:
-            if substr in record.msg:
-                return self._substr_buckets[substr]
+            if record and hasattr(record, 'msg'):
+                if substr in record.msg:
+                    return self._substr_buckets[substr]
 
         return None  # None indicates no filtering
 
