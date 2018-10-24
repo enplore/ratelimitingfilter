@@ -4,7 +4,7 @@ except ImportError:
     from distutils.core import setup
 
 setup(name='ratelimitingfilter',
-      version='0.5-enplore',
+      version='0.5.dev1',
       description='A rate limiting filter for the Python logging system',
       long_description=open('README.rst').read(),
       url='https://github.com/wkeeling/ratelimitingfilter',
